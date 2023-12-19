@@ -228,7 +228,7 @@ def drawBitmap(w_image):
         res2 = cv2.inRange(res, i, i)
         res2 = cv2.bitwise_not(res2)
         cv2.imwrite('.tmp.bmp', res2)
-        os.system('potrace.exe .tmp.bmp -s --flat')
+        os.system('potrace .tmp.bmp -s --flat')
         # print(i)
         drawSVG('.tmp.svg', '#%02x%02x%02x' % (i[2], i[1], i[0]))
     os.remove('.tmp.bmp')
