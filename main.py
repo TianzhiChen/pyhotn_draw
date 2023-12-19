@@ -10,7 +10,7 @@ import sys
 import numpy as np
 import cv2
 import os
-from win32.win32api import GetSystemMetrics
+import tkinter as tk
 
 WriteStep = 15  # 贝塞尔函数的取样次数
 Speed = 1000
@@ -236,6 +236,8 @@ def drawBitmap(w_image):
     print('\n\rFinished, close the window to exit.')
     te.done()
 
+def get_screen_size(window):
+    return window.winfo_screenwidth(), window.winfo_screenheight()
 
 if __name__ == '__main__':
     paser = argparse.ArgumentParser(
@@ -254,8 +256,14 @@ if __name__ == '__main__':
     if os.path.splitext(args.filename)[1].lower() not in ['.jpg', '.bmp', '.png']:
         print(__file__ + ': error: The file is not a bitmap file.')
         quit()
+
+    root = tk.Tk()
+    root.withdraw()  # 不显示tkinter窗口
+    screen_width, screen_height = get_screen_size(root)
+
     bitmap = cv2.imread(args.filename)
-    if bitmap.shape[0] > GetSystemMetrics(1):
-        bitmap = cv2.resize(bitmap, (int(bitmap.shape[1] * (
-            (GetSystemMetrics(1) - 50) / bitmap.shape[0])), GetSystemMetrics(1) - 50))
+    if bitmap.shape[0] > screen_height:
+        bitmap = cv2.resize(bitmap, (int(bitmap.shape[1] * ((screen_height - 50) / bitmap.shape[0])), screen_height - 50))
+
     drawBitmap(bitmap)
+
